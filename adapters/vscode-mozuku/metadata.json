@@ -1,0 +1,17 @@
+{
+  "buildTime": "2025-12-09T17:38:04.621Z",
+  "platform": "darwin",
+  "arch": "arm64",
+  "version": "0.1.0",
+  "systemLibraries": {
+    "required": [
+      "MeCab",
+      "CURL"
+    ],
+    "optional": [
+      "CaboCha",
+      "CRF++"
+    ],
+    "note": "System libraries must be installed on target system"
+  }
+}

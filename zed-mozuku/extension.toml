@@ -1,7 +1,0 @@
-id = "mozuku"
-name = "MoZuku"
-version = "0.1.0"
-schema_version = 1
-authors = ["t3tra", "kozika"]
-description = "Japanese LSP: diagnostics + semantic tokens. Requires system MeCab/CaboCha libraries."
-repository = "https://github.com/t3tra-dev/MoZuku"

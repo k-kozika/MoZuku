@@ -1,0 +1,6 @@
+name = "Japanese"
+grammar = "japanese"
+path_suffixes = [
+    ".ja.txt",
+    ".ja.md"
+]
