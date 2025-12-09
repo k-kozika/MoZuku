@@ -66,13 +66,55 @@ jobs:
         if: ${{ matrix.os != 'windows-latest' }}
         run: |
           npm install -g tree-sitter-cli
-          echo "PATH=$(npm prefix -g)/bin:$PATH" >> $GITHUB_ENV
+          BIN_DIR="$(npm prefix -g)/bin"
+          echo "PATH=${BIN_DIR}:$PATH" >> $GITHUB_ENV
 
       - name: Install tree-sitter CLI (Windows)
         if: ${{ matrix.os == 'windows-latest' }}
         run: |
           npm install -g tree-sitter-cli
-          echo "PATH=$(npm prefix -g)\bin;$env:PATH" >> $env:GITHUB_ENV
+          $binDir = "$(npm prefix -g)\bin"
+          echo "PATH=$binDir;$env:PATH" >> $env:GITHUB_ENV
+
+      - name: Build CRF++ (Ubuntu)
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          git clone https://github.com/taku910/crfpp.git
+          cd crfpp
+          ./configure --prefix=/usr CXXFLAGS="-std=c++11"
+          make -j2
+          sudo make install
+          sudo ldconfig
+
+      - name: Build CaboCha (Ubuntu)
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          git clone https://github.com/taku910/cabocha.git
+          cd cabocha
+          ./configure --with-charset=UTF8 --with-mecab-config=/usr/bin/mecab-config --with-crfpp-config=/usr/bin/crf-config --prefix=/usr CXXFLAGS="-std=c++11"
+          make -j2
+          sudo make install
+          sudo ldconfig
+
+      - name: Build CRF++ (Windows)
+        if: ${{ matrix.os == 'windows-latest' }}
+        shell: msys2 {0}
+        run: |
+          git clone https://github.com/taku910/crfpp.git
+          cd crfpp
+          ./configure --prefix=/mingw64 --with-charset=UTF8 CXXFLAGS="-std=c++11"
+          make -j2
+          make install
+
+      - name: Build CaboCha (Windows)
+        if: ${{ matrix.os == 'windows-latest' }}
+        shell: msys2 {0}
+        run: |
+          git clone https://github.com/taku910/cabocha.git
+          cd cabocha
+          ./configure --with-charset=UTF8 --with-mecab-config=/mingw64/bin/mecab-config --with-crfpp-config=/mingw64/bin/crf-config --prefix=/mingw64 CXXFLAGS="-std=c++11"
+          make -j2
+          make install
 
       - name: Configure (CMake, non-Windows)
         if: ${{ matrix.os != 'windows-latest' }}
